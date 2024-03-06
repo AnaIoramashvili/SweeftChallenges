@@ -17,6 +17,49 @@ func lengthOfLongestSubstring(_ s: String) -> Int {
     return maxLength
 }
 
+// ამოცანა 2
+
+func minWindow(_ s: String, _ t: String) -> String {
+    var charCount = [Character: Int]()
+    
+    for char in t {
+        charCount[char, default: 0] += 1
+    }
+    
+    var left = 0
+    var minLeft = 0
+    var minLen = Int.max
+    var count = t.count
+    
+    let sArray = Array(s)
+    
+    for (right, char) in sArray.enumerated() {
+        if let val = charCount[char] {
+            charCount[char] = val - 1
+            if val > 0 {
+                count -= 1
+            }
+        }
+        
+        while count == 0 {
+            if right - left + 1 < minLen {
+                minLeft = left
+                minLen = right - left + 1
+            }
+            
+            if let val = charCount[sArray[left]] {
+                charCount[sArray[left]] = val + 1
+                if val >= 0 {
+                    count += 1
+                }
+            }
+            
+            left += 1
+        }
+    }
+    
+    return minLen == Int.max ? "" : String(sArray[minLeft..<minLeft + minLen])
+}
 
 // ამოცანა 3
 
